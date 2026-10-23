@@ -14,6 +14,11 @@ type Config struct {
 	SystemPromptFile string
 	DatabaseURL      string
 	EmbeddingDim     int
+	EmbeddingBaseURL string
+	EmbeddingAPIKey  string
+	EmbeddingModel   string
+	IngestDir        string
+	ProcessedDir     string
 }
 
 func Load() Config {
@@ -25,6 +30,11 @@ func Load() Config {
 		SystemPromptFile: os.Getenv("SYSTEM_PROMPT_FILE"),
 		DatabaseURL:      os.Getenv("DATABASE_URL"),
 		EmbeddingDim:     atoiOr(os.Getenv("EMBEDDING_DIM"), 0),
+		EmbeddingBaseURL: os.Getenv("EMBEDDING_BASE_URL"),
+		EmbeddingAPIKey:  os.Getenv("EMBEDDING_API_KEY"),
+		EmbeddingModel:   os.Getenv("EMBEDDING_MODEL"),
+		IngestDir:        os.Getenv("INGEST_DIR"),
+		ProcessedDir:     os.Getenv("PROCESSED_DIR"),
 	}
 	if cfg.BaseURL == "" {
 		cfg.BaseURL = "https://api.openai.com/v1"
@@ -35,8 +45,28 @@ func Load() Config {
 	}
 
 	if cfg.EmbeddingDim == 0 {
-		cfg.EmbeddingDim = 768
+		cfg.EmbeddingDim = 4096
 	}
+
+	if cfg.EmbeddingBaseURL == "" {
+		cfg.EmbeddingBaseURL = cfg.BaseURL
+		if cfg.EmbeddingAPIKey == "" {
+			cfg.EmbeddingAPIKey = cfg.APIKey
+		}
+	}
+
+	if cfg.EmbeddingModel == "" {
+		cfg.EmbeddingModel = "nvidia/nemotron-3-embed-1b:free"
+	}
+
+	if cfg.IngestDir == "" {
+		cfg.IngestDir = "./documents"
+	}
+
+	if cfg.ProcessedDir == "" {
+		cfg.ProcessedDir = "./documents/processed"
+	}
+
 	return cfg
 }
 

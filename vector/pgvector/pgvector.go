@@ -79,7 +79,9 @@ func (s *Store) migrate(ctx context.Context, dim int) error {
 						embedding vector(%d) NOT NULL,
 						created_at timestamp with time zone NOT NULL DEFAULT now()
 					);`, dim),
-		`CREATE INDEX IF NOT EXISTS documents_embedding_idx ON documents USING hnsw (embedding vector_cosine_ops);`,
+	}
+	if dim <= 2000 {
+		stmts = append(stmts, `CREATE INDEX IF NOT EXISTS documents_embedding_idx ON documents USING hnsw (embedding vector_cosine_ops);`)
 	}
 	for _, q := range stmts {
 		if _, err := s.pool.Exec(ctx, q); err != nil {
