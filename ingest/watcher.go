@@ -61,7 +61,7 @@ func Watch(ctx context.Context, opts Options, embedder llm.Embedder, store vecto
 
 	entries, err := os.ReadDir(opts.SourceDir)
 	if err != nil {
-		fmt.Errorf("read source dir: %w", err)
+		return fmt.Errorf("read source dir: %w", err)
 	}
 	for _, e := range entries {
 		if e.IsDir() || strings.HasPrefix(e.Name(), ".") {
