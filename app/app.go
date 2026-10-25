@@ -70,7 +70,7 @@ func Run(parent context.Context, cfg config.Config) error {
 		})
 		
 		if err != nil {
-			logger.Printf("web server disabled: %w", err)
+			logger.Printf("web server disabled: %v", err)
 		} else {
 			wg.Go(func() {
 				if err := srv.Run(ctx, cfg.HTTPAddr); err != nil && ctx.Err() == nil {
