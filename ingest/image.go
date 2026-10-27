@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-const ImagePathprefix = "/images"
+const ImagePathprefix = "/images/"
 
 var imageExtensions = map[string]bool{
 	".png":  true,
